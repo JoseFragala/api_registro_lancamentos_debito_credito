@@ -15,6 +15,7 @@ import java.net.URI;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import java.util.Optional;
 
 
 import com.example.algamoney.api.model.Categoria;
@@ -56,8 +57,12 @@ public class CategoriaResource {
     }        
 
     @GetMapping("/{codigo}")
-    public Categoria buscarPeloCodigo(@PathVariable Long codigo){
-        return categoriaRepository.findById(codigo).orElse(null);
+    public ResponseEntity<Categoria> buscarPeloCodigo(@PathVariable Long codigo){
+        Optional<Categoria> categoria = this.categoriaRepository.findById(codigo);
+        return categoria.isPresent() ?
+               ResponseEntity.ok(categoria.get()) : ResponseEntity.notFound().build();
+
+
     }// o método buscarPeloCodigo() recebe um código de categoria na URL,
     // busca essa categoria no banco de dados e retorna o objeto Categoria correspondente.
 
