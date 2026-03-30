@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Entity // é uma entidade do banco de dados
 @Table(name = "categoria") // nome da tabela no banco de dados
-public class categoria {
+public class Categoria {
 
 
     @Id
@@ -49,7 +49,7 @@ public class categoria {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        categoria other = (categoria) obj;
+        Categoria other = (Categoria) obj;
         if (codigo == null) {
             if (other.codigo != null)
                 return false;
