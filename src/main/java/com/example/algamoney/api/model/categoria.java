@@ -5,6 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 
 @Entity // é uma entidade do banco de dados
 @Table(name = "categoria") // nome da tabela no banco de dados
@@ -15,6 +18,9 @@ public class Categoria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)// gera o código automaticamente, 
     // incrementando a cada nova categoria criada
     private Long codigo;
+
+    @NotNull // o nome da categoria não pode  ser nulo
+    @Size(min = 3, max = 20) // o nome da categoria deve ter entre 3 e 20 caracteres
     private String nome;
 
     public String getNome() {

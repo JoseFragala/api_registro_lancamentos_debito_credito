@@ -16,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.Optional;
+import javax.validation.Valid;
 
 
 import com.example.algamoney.api.model.Categoria;
@@ -42,7 +43,7 @@ public class CategoriaResource {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) // quando o cliente fizer uma requisição POST para /categorias,
     // esse método será chamado e o status da resposta HTTP será 201 Created.
-    public ResponseEntity<Categoria> criar(@RequestBody Categoria categoria, HttpServletResponse response) {
+    public ResponseEntity<Categoria> criar(@Valid @RequestBody Categoria categoria, HttpServletResponse response) {
         Categoria categoriaSalva = categoriaRepository.save(categoria); // faz um INSERT INTO categoria 
         // (nome) VALUES (categoria.getNome())
 

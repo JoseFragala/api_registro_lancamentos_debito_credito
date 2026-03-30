@@ -11,7 +11,12 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 @ControllerAdvice // é uma anotação do Spring que indica que essa classe é um manipulador de exceções global, ou seja,
 // ela será responsável por tratar as exceções lançadas em toda a aplicação.
@@ -28,9 +33,31 @@ public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
 
         String mensagemUsuario = messageSource.getMessage("mensagem.invalida", null, LocaleContextHolder.getLocale());
         String mensagemDesenvolvedor = ex.getCause().toString();
-        return handleExceptionInternal(ex, new Erro(mensagemUsuario, mensagemDesenvolvedor), headers, HttpStatus.BAD_REQUEST, request);
+        List<Erro> erros = Arrays.asList (new Erro(mensagemUsuario, mensagemDesenvolvedor));
+        return handleExceptionInternal(ex, erros, headers, HttpStatus.BAD_REQUEST, request);
     }
     
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, 
+        HttpHeaders headers, HttpStatus status, WebRequest request){
+
+            List<Erro> erros = criarListaDeErros(ex.getBindingResult());
+            return handleExceptionInternal (ex, erros, headers, HttpStatus.BAD_REQUEST, request);
+
+        }
+    private List<Erro> criarListaDeErros(BindingResult bindingResult){
+        List<Erro> erros = new ArrayList<>();
+
+        for (FieldError fieldError : bindingResult.getFieldErrors()) {
+            String mensagemUsuario = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
+            String mensagemDesenvolvedor = fieldError.toString();
+            erros.add(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+        }
+
+        return erros;
+    }
+    
+
     public static class Erro {
 
         private String mensagemUsuario;
