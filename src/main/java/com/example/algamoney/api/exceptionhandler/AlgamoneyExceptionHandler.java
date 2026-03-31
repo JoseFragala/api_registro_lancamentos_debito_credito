@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice // é uma anotação do Spring que indica que essa classe é um manipulador de exceções global, ou seja,
 // ela será responsável por tratar as exceções lançadas em toda a aplicação.
@@ -45,6 +47,18 @@ public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
             return handleExceptionInternal (ex, erros, headers, HttpStatus.BAD_REQUEST, request);
 
         }
+    @ExceptionHandler({EmptyResultDataAccessException.class})
+    public ResponseEntity<Object> handleEmpyResultDataAcessException(EmptyResultDataAccessException 
+        ex, WebRequest request){
+            String mensagemUsuario = messageSource.getMessage("recurso.nao-encontrado", 
+                null, LocaleContextHolder.getLocale());
+            String mensagemDesenvolvedor = ex.toString();
+            List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+        return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+
+
     private List<Erro> criarListaDeErros(BindingResult bindingResult){
         List<Erro> erros = new ArrayList<>();
 
