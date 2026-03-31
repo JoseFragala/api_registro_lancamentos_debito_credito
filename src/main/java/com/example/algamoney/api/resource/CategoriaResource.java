@@ -7,16 +7,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import javax.servlet.http.HttpServletResponse;
-import java.net.URI;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.Optional;
 import javax.validation.Valid;
+import com.example.algamoney.api.event.RecursoCriadoEvent;
 
 
 import com.example.algamoney.api.model.Categoria;
@@ -33,6 +33,9 @@ public class CategoriaResource {
     @Autowired // ache uma implementação de CategoriaRepository e injete aqui.
     private CategoriaRepository categoriaRepository;
 
+     @Autowired
+    private ApplicationEventPublisher publisher;
+
     @GetMapping // sabe que é esse método que deve ser chamado quando o cliente fizer uma 
     // requisição GET para /categorias
     public List<Categoria> listar() {
@@ -47,14 +50,8 @@ public class CategoriaResource {
         Categoria categoriaSalva = categoriaRepository.save(categoria); // faz um INSERT INTO categoria 
         // (nome) VALUES (categoria.getNome())
 
-       URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}") 
-        .buildAndExpand(categoriaSalva.getCodigo()).toUri();
-        response.setHeader("Location", uri.toASCIIString());
-    // o método criar() recebe um objeto Categoria no corpo da requisição HTTP, 
-    // salva esse objeto no banco de dados e retorna o status 201 Created. 
-    // Além disso, o método também retorna o URI da nova categoria criada no 
-    // header Location da resposta HTTP.
-        return ResponseEntity.created(uri).body(categoriaSalva);
+        publisher.publishEvent(new RecursoCriadoEvent(this, response, categoriaSalva.getCodigo()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoriaSalva);
     }        
 
     @GetMapping("/{codigo}")
