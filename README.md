@@ -169,4 +169,66 @@ Durante o desenvolvimento deste projeto foi possível compreender:
 * Como o JPA abstrai o acesso ao banco
 * Diferença entre versões do Spring e impacto no código
 
+---
 
+## 📊 Diagrama de Classes
+
+```mermaid
+classDiagram
+
+class Pessoa {
+  Long codigo
+  String nome
+  Boolean ativo
+}
+
+class Endereco {
+  <<embedded>>
+  String logradouro
+  String numero
+  String complemento
+  String bairro
+  String cep
+  String cidade
+  String estado
+}
+
+class Categoria {
+  Long codigo
+  String nome
+}
+
+class Lancamento {
+  Long codigo
+  String descricao
+  LocalDate dataVencimento
+  LocalDate dataPagamento
+  BigDecimal valor
+  String observacao
+  TipoLancamento tipo
+}
+
+class Usuario {
+  Long codigo
+  String nome
+  String email
+  String senha
+}
+
+class Permissao {
+  Long codigo
+  String descricao
+}
+
+class TipoLancamento {
+  <<ENUM>>
+  RECEITA
+  DESPESA
+}
+
+Pessoa --> Endereco
+Lancamento --> Pessoa
+Lancamento --> Categoria
+Lancamento --> TipoLancamento
+Usuario --> Permissao
+```
