@@ -1,0 +1,34 @@
+package com.example.algamoney.api.resource;
+
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.algamoney.api.model.Lancamento;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.ResponseEntity;
+import com.example.algamoney.api.repository.LancamentoRepository;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.web.bind.annotation.PathVariable;
+
+@RestController
+@RequestMapping("/lancamentos")
+public class LancamentoResource {
+
+    @Autowired
+    private LancamentoRepository lancamentoRepository;
+
+    @GetMapping
+    public List<Lancamento> listar() {
+        return lancamentoRepository.findAll();
+    }
+
+    @GetMapping("/{codigo}")
+    public ResponseEntity<Lancamento> buscarPeloCodigo(@PathVariable Long codigo){
+        Optional<Lancamento> lancamento = this.lancamentoRepository.findById(codigo);
+        return lancamento.isPresent() ?
+                ResponseEntity.ok(lancamento.get()) : ResponseEntity.notFound().build();
+    }
+}
