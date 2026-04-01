@@ -17,8 +17,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 @ControllerAdvice // é uma anotação do Spring que indica que essa classe é um manipulador de exceções global, ou seja,
 // ela será responsável por tratar as exceções lançadas em toda a aplicação.
@@ -55,6 +57,14 @@ public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
             String mensagemDesenvolvedor = ex.toString();
             List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
         return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+    @ExceptionHandler({DataIntegrityViolationException.class})
+    public ResponseEntity<Object> HandleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request){
+          String mensagemUsuario = messageSource.getMessage("recurso.operacao-nao-permitida", 
+                null, LocaleContextHolder.getLocale());
+            String mensagemDesenvolvedor = ExceptionUtils.getRootCauseMessage(ex);
+            List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+        return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
 

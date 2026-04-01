@@ -55,6 +55,13 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
 
+        <!-- Commons lang -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
+        </dependency>
+
         <!-- DEVTOOLS -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
