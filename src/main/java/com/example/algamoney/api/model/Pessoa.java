@@ -1,10 +1,15 @@
 package com.example.algamoney.api.model;
 
+import java.beans.Transient;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.Table;
 
@@ -58,6 +63,11 @@ public class Pessoa {
 
     public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
+    }
+    @JsonIgnore // para não ser serializado
+    @Transient // para não ser persistido
+    public boolean isInativo() {
+        return !this.ativo;
     }
 
     @Override
