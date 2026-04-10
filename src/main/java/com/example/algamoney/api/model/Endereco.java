@@ -2,9 +2,10 @@ package com.example.algamoney.api.model;
 
 import javax.persistence.Embeddable;
 
-@Embeddable
+@Embeddable // Anotação para indicar que a classe é um componente embutido (não é uma entidade independente,
+//  mas sim parte de outra entidade)
 public class Endereco {
-
+// Campos do endereço, que serão mapeados como parte da tabela Pessoa
 	private String logradouro;
 	private String numero;
 	private String complemento;
@@ -13,6 +14,8 @@ public class Endereco {
 	private String cidade;
 	private String estado;
 	
+
+// Getters e Setters para os campos da classe Endereco
 	public String getLogradouro() {
 		return logradouro;
 	}
@@ -69,3 +72,9 @@ public class Endereco {
 		this.estado = estado;
 	}
 }
+
+// Nesse código, a classe Endereco é um componente embutido (annotated with @Embeddable) 
+// que representa os campos de endereço de uma pessoa. Ela não é uma entidade independente,
+// mas sim parte da entidade Pessoa, e seus campos serão mapeados como parte da tabela Pessoa no banco de dados.
+// ou seja, os campos da classe Endereco serão armazenados na mesma tabela que a classe Pessoa,
+// e não em uma tabela separada. 

@@ -22,14 +22,14 @@ import com.example.algamoney.api.model.Pessoa;
 import com.example.algamoney.api.repository.PessoaRepository;
 import com.example.algamoney.api.service.PessoaService;
 
-@RestController
-@RequestMapping("/pessoas")
+@RestController // Anotação para indicar que esta classe é um controlador REST.
+@RequestMapping("/pessoas")// Anotação p/ mapear as requisições p/ o endpoint "/pessoas" para os métodos desta classe.
 public class PessoaResource {
 
-	@Autowired
+	@Autowired// Anotação para injetar a dependência do repositório de pessoas.
 	private PessoaRepository pessoaRepository;
 	
-	@Autowired
+	@Autowired 
 	private PessoaService pessoaService;
 	
 	@Autowired
@@ -67,3 +67,18 @@ public class PessoaResource {
 	}
 
 }
+
+// nesse código, a classe PessoaResource é um controlador REST que lida com as requisições HTTP relacionadas à entidade Pessoa.
+// Ela se relaciona com a classe Pessoa, que é a entidade JPA.
+// também se comunica com a classe PessoaRepository, que é o repositório Spring Data JPA para entidade Pessoa.
+// A classe PessoaResource usa os métodos do repositório para acessar e manipular os dados das pessoas no banco de dados.
+// Os métodos da classe PessoaResource são mapeados para os endpoints REST usando as anotações do Spring MVC:
+// @GetMapping, @PostMapping, @PutMapping e @DeleteMapping, permitindo que a aplicação responda às requisições HTTP para criar, ler, atualizar e excluir pessoas.
+// O método criar() é responsável por criar uma nova pessoa, usando o método save() do repositório para salvar a pessoa no banco de dados e publicando um evento de recurso criado (RecursoCriadoEvent) para notificar outras partes da aplicação sobre a criação de um novo recurso (pessoa).
+// O método buscarPeloCodigo() é responsável por buscar uma pessoa pelo seu código (ID), usando o método findOne() do repositório para buscar a pessoa no banco de dados e retornando uma resposta HTTP adequada (200 OK se a pessoa for encontrada, 404 Not Found se não for encontrada).
+// O método remover() é responsável por excluir uma pessoa pelo seu código (ID), usando o
+// método delete() do repositório para excluir a pessoa do banco de dados e retornando uma resposta HTTP 204 No Content.
+// O método atualizar() é responsável por atualizar uma pessoa existente, usando o serviço de pessoas para
+// realizar a lógica de negócio ao atualizar a pessoa e retornando a pessoa atualizada em uma resposta HTTP 200 OK.
+// O método atualizarPropriedadeAtivo() é responsável por atualizar a propriedade "ativo" de uma pessoa,
+// usando o serviço de pessoas para realizar a lógica de negócio ao atualizar a propriedade e retornando uma resposta HTTP 204 No Content.
