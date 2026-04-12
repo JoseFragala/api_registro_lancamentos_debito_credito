@@ -11,3 +11,4 @@ public interface LancamentoRepositoryQuery {
 	public Page<Lancamento> filtrar(LancamentoFilter lancamentoFilter, Pageable pageable);
 	
 }
+

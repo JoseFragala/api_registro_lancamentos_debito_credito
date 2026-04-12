@@ -19,3 +19,10 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
 // - findAll(): para listar todas as categorias.
 // - save(): para salvar uma nova categoria no banco de dados. 
 // - findById(): para buscar uma categoria pelo seu código (ID). por ser uma versão antiga, está usando findOne().
+
+
+
+// nessa pasta "repository" estão as interfaces de repositório do Spring Data JPA para as entidades da aplicação,
+// como CategoriaRepository, PessoaRepository e LancamentoRepository. Essas interfaces estendem JpaRepository,
+// o que permite que a aplicação realize operações de CRUD (Create, Read, Update, Delete)
+// e outras operações de acesso a dados para as entidades correspondentes, como Categoria, Pessoa e Lancamento. 
