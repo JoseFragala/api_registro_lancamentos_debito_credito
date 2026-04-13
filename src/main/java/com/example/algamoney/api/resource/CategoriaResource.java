@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.example.algamoney.api.event.RecursoCriadoEvent;
 import com.example.algamoney.api.model.Categoria;
 import com.example.algamoney.api.repository.CategoriaRepository;
@@ -38,6 +39,7 @@ public class CategoriaResource {
 	// URL do recurso recém-criado.
 	private ApplicationEventPublisher publisher;
 	
+
 	@GetMapping // Anotação para mapear as requisições GET para o endpoint "/categorias" para este método,
 	// permitindo que ele seja chamado quando uma requisição GET for feita para "/categorias".
 	public List<Categoria> listar() { // Método para listar todas as categorias.
