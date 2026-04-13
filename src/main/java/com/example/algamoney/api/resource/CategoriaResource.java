@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,6 +43,7 @@ public class CategoriaResource {
 
 	@GetMapping // Anotação para mapear as requisições GET para o endpoint "/categorias" para este método,
 	// permitindo que ele seja chamado quando uma requisição GET for feita para "/categorias".
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and #oauth2.hasScope('read')")
 	public List<Categoria> listar() { // Método para listar todas as categorias.
 	//  Ele retorna uma lista de objetos Categoria, que são obtidos do banco de dados usando
 	//  o método findAll() do repositório de categorias.	
@@ -50,6 +52,7 @@ public class CategoriaResource {
 	
 	@PostMapping // Anotação para mapear as requisições POST para o endpoint "/categorias" para este método,
 	// permitindo que ele seja chamado quando uma requisição POST for feita para "/categorias".
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA')and #oauth2.hasScope('write')")
 	public ResponseEntity<Categoria> criar(@Valid @RequestBody Categoria categoria, HttpServletResponse response) { 
 		// Método para criar uma nova categoria. Ele recebe um objeto Categoria no corpo da requisição 
 		// (anotado com @RequestBody para indicar que deve ser desserializado a partir do JSON da requisição)
@@ -69,6 +72,7 @@ public class CategoriaResource {
 	@GetMapping("/{codigo}") // Anotação para mapear as requisições GET para o endpoint 
 	// "/categorias/{codigo}" para este método, permitindo que ele seja chamado quando
 	// uma requisição GET for feita para "/categorias/{codigo}", onde {codigo} é um parâmetro de caminho.
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA')and #oauth2.hasScope('read')")
 	public ResponseEntity<Categoria> buscarPeloCodigo(@PathVariable Long codigo) { 
 		//Método para buscar uma categoria pelo seu código (ID).
 		// Ele recebe o código da categoria como um parâmetro de caminho
