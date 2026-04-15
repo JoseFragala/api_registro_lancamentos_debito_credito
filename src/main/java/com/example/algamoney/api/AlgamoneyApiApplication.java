@@ -2,8 +2,12 @@ package com.example.algamoney.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+
+import com.example.algamoney.api.config.property.AlgamoneyApiProperty;
 
 @SpringBootApplication // Anotação para indicar que esta é a classe principal de uma aplicação Spring Boot
+@EnableConfigurationProperties(AlgamoneyApiProperty.class)
 public class AlgamoneyApiApplication {
 
 	public static void main(String[] args) {

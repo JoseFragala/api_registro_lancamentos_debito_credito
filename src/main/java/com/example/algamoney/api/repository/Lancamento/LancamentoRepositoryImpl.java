@@ -16,9 +16,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
+import com.example.algamoney.api.model.Categoria_;
 import com.example.algamoney.api.model.Lancamento;
 import com.example.algamoney.api.model.Lancamento_;
+import com.example.algamoney.api.model.Pessoa_;
 import com.example.algamoney.api.repository.filter.LancamentoFilter;
+import com.example.algamoney.api.repository.projection.ResumoLancamento;
 
 public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
 // Esta classe é uma implementação personalizada do repositório de lançamentos, implementa interface LancamentoRepositoryQuery.
@@ -55,6 +58,28 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
 		// O resultado é retornado como um objeto PageImpl, o que permite que a aplicação trabalhe com os resultados 
 		// de forma paginada, fornecendo informações sobre a página atual e o total de registros que correspondem aos critérios de filtragem.
 
+	}
+
+	@Override
+	public Page<ResumoLancamento> resumir(LancamentoFilter lancamentoFilter, Pageable pageable){
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<ResumoLancamento> criteria = builder.createQuery(ResumoLancamento.class);
+		Root<Lancamento> root = criteria.from(Lancamento.class);
+
+		criteria.select(builder.construct(ResumoLancamento.class
+			, root.get(Lancamento_.codigo), root.get(Lancamento_.descricao)
+			, root.get(Lancamento_.dataVencimento), root.get(Lancamento_.dataPagamento)
+			,root.get(Lancamento_.valor), root.get(Lancamento_.tipo)
+			, root.get(Lancamento_.categoria).get(Categoria_.nome)
+			,root.get(Lancamento_.pessoa).get(Pessoa_.nome)));
+
+		Predicate[] predicates = criarRestricoes(lancamentoFilter, builder, root);
+		criteria.where(predicates);
+		
+		TypedQuery<ResumoLancamento> query = manager.createQuery(criteria);
+		adicionarRestricoesDePaginacao(query, pageable);
+		
+		return new PageImpl<>(query.getResultList(), pageable, total(lancamentoFilter));
 	}
 
 	private Predicate[] criarRestricoes(LancamentoFilter lancamentoFilter, CriteriaBuilder builder,
@@ -100,7 +125,7 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
 	// O método criarRestricoes() retorna um array de Predicate, que é usado para aplicar 
 	// as restrições de filtragem à consulta usando o método where() do CriteriaQuery.
 
-	private void adicionarRestricoesDePaginacao(TypedQuery<Lancamento> query, Pageable pageable) {
+	private void adicionarRestricoesDePaginacao(TypedQuery<?> query, Pageable pageable) {
 		int paginaAtual = pageable.getPageNumber();
 		int totalRegistrosPorPagina = pageable.getPageSize();
 		int primeiroRegistroDaPagina = paginaAtual * totalRegistrosPorPagina;
